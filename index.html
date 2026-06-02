@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>嘉荣回收电脑 - 专业电脑回收平台</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+            background: #0a0a0f;
+            color: #e0e0e0;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* 粒子背景 */
+        #particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* 导航栏 */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+            padding: 20px 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 10, 15, 0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0, 255, 255, 0.1);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 900;
+            letter-spacing: 3px;
+            background: linear-gradient(135deg, #00ffff, #0080ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #aaa;
+            text-decoration: none;
+            font-size: 14px;
+            letter-spacing: 2px;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: #00ffff;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: #00ffff;
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* 主视觉区 */
+        .hero {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 120px 60px 60px;
+        }
+
+        .hero-content {
+            text-align: center;
+            max-width: 800px;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 8px 24px;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-radius: 50px;
+            font-size: 13px;
+            letter-spacing: 3px;
+            color: #00ffff;
+            margin-bottom: 30px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 10px rgba(0, 255, 255, 0.2); }
+            50% { box-shadow: 0 0 30px rgba(0, 255, 255, 0.5); }
+        }
+
+        .hero h1 {
+            font-size: 56px;
+            font-weight: 900;
+            letter-spacing: 5px;
+            line-height: 1.3;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #ffffff, #00ffff, #0080ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 18px;
+            color: #888;
+            letter-spacing: 4px;
+            margin-bottom: 40px;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            padding: 16px 40px;
+            background: linear-gradient(135deg, #00ffff, #0080ff);
+            border: none;
+            border-radius: 50px;
+            color: #0a0a0f;
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 40px rgba(0, 255, 255, 0.4);
+        }
+
+        .btn-outline {
+            padding: 16px 40px;
+            background: transparent;
+            border: 1px solid rgba(0, 255, 255, 0.5);
+            border-radius: 50px;
+            color: #00ffff;
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-outline:hover {
+            background: rgba(0, 255, 255, 0.1);
+            border-color: #00ffff;
+            box-shadow: 0 10px 40px rgba(0, 255, 255, 0.2);
+        }
+
+        /* 滚动指示器 */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(10px); }
+        }
+
+        .scroll-indicator span {
+            font-size: 12px;
+            letter-spacing: 2px;
+            color: #555;
+        }
+
+        .scroll-line {
+            width: 1px;
+            height: 40px;
+            background: linear-gradient(to bottom, #00ffff, transparent);
+        }
+
+        /* 服务区域 */
+        .section {
+            position: relative;
+            z-index: 1;
+            padding: 100px 60px;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .section-title h2 {
+            font-size: 36px;
+            font-weight: 900;
+            letter-spacing: 5px;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #ffffff, #00ffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-title .line {
+            width: 60px;
+            height: 2px;
+            background: #00ffff;
+            margin: 0 auto;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .service-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(0, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 40px 30px;
+            text-align: center;
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0, 255, 255, 0.05), transparent);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(0, 255, 255, 0.4);
+            box-shadow: 0 20px 60px rgba(0, 255, 255, 0.1);
+        }
+
+        .service-card:hover::before {
+            opacity: 1;
+        }
+
+        .service-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .service-card h3 {
+            font-size: 20px;
+            letter-spacing: 3px;
+            margin-bottom: 12px;
+            color: #00ffff;
+            position: relative;
+            z-index: 1;
+        }
+
+        .service-card p {
+            font-size: 14px;
+            color: #888;
+            line-height: 1.8;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* 流程区域 */
+        .process {
+            background: rgba(0, 255, 255, 0.02);
+            border-top: 1px solid rgba(0, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(0, 255, 255, 0.05);
+        }
+
+        .process-steps {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .step {
+            text-align: center;
+            flex: 1;
+            min-width: 200px;
+            position: relative;
+        }
+
+        .step-number {
+            width: 70px;
+            height: 70px;
+            border: 2px solid rgba(0, 255, 255, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 28px;
+            font-weight: 900;
+            color: #00ffff;
+            transition: all 0.3s;
+        }
+
+        .step:hover .step-number {
+            background: rgba(0, 255, 255, 0.1);
+            border-color: #00ffff;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+        }
+
+        .step h4 {
+            font-size: 16px;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+
+        .step p {
+            font-size: 13px;
+            color: #666;
+        }
+
+        /* 价格区域 */
+        .price-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .price-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(0, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .price-card:hover {
+            border-color: rgba(0, 255, 255, 0.3);
+            box-shadow: 0 10px 40px rgba(0, 255, 255, 0.08);
+        }
+
+        .price-card .category {
+            font-size: 14px;
+            letter-spacing: 2px;
+            color: #00ffff;
+            margin-bottom: 15px;
+        }
+
+        .price-card .price {
+            font-size: 32px;
+            font-weight: 900;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+
+        .price-card .price span {
+            font-size: 16px;
+            color: #888;
+        }
+
+        .price-card .desc {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.8;
+        }
+
+        /* 联系区域 */
+        .contact-section {
+            text-align: center;
+        }
+
+        .contact-card {
+            max-width: 500px;
+            margin: 0 auto;
+            background: rgba(0, 255, 255, 0.03);
+            border: 1px solid rgba(0, 255, 255, 0.15);
+            border-radius: 20px;
+            padding: 50px 40px;
+        }
+
+        .contact-phone {
+            font-size: 36px;
+            font-weight: 900;
+            letter-spacing: 3px;
+            color: #00ffff;
+            margin: 20px 0;
+            text-decoration: none;
+            display: block;
+            transition: all 0.3s;
+        }
+
+        .contact-phone:hover {
+            text-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
+        }
+
+        .contact-qr {
+            width: 120px;
+            height: 120px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            border-radius: 12px;
+            margin: 20px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: #555;
+        }
+
+        .contact-info {
+            font-size: 14px;
+            color: #888;
+            line-height: 2;
+        }
+
+        /* 页脚 */
+        .footer {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            padding: 40px;
+            border-top: 1px solid rgba(0, 255, 255, 0.05);
+            font-size: 13px;
+            color: #444;
+            letter-spacing: 2px;
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 15px 20px;
+            }
+            .nav-links {
+                display: none;
+            }
+            .hero h1 {
+                font-size: 32px;
+            }
+            .section {
+                padding: 60px 20px;
+            }
+            .section-title h2 {
+                font-size: 26px;
+            }
+            .process-steps {
+                gap: 30px;
+            }
+            .contact-phone {
+                font-size: 26px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 粒子背景 -->
+    <canvas id="particles"></canvas>
+
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="logo">嘉荣回收</div>
+        <ul class="nav-links">
+            <li><a href="#services">服务项目</a></li>
+            <li><a href="#process">回收流程</a></li>
+            <li><a href="#price">价格参考</a></li>
+            <li><a href="#contact">联系我们</a></li>
+        </ul>
+    </nav>
+
+    <!-- 主视觉 -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">PROFESSIONAL RECYCLING</div>
+            <h1>嘉荣回收电脑</h1>
+            <p class="hero-subtitle">专业 · 高价 · 安全 · 环保</p>
+            <div class="hero-cta">
+                <a href="tel:13377697350" class="btn-primary">立即咨询</a>
+                <a href="#services" class="btn-outline">了解更多</a>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <span>SCROLL</span>
+            <div class="scroll-line"></div>
+        </div>
+    </section>
+
+    <!-- 服务项目 -->
+    <section class="section" id="services">
+        <div class="section-title">
+            <h2>服务项目</h2>
+            <div class="line"></div>
+        </div>
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-icon">💻</div>
+                <h3>笔记本回收</h3>
+                <p>苹果、联想、戴尔、惠普、华硕等全品牌笔记本高价回收，现场检测当场付款</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">🖥️</div>
+                <h3>台式机回收</h3>
+                <p>品牌机、组装机、一体机整机回收，CPU、显卡、内存等配件单独估价</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">🖨️</div>
+                <h3>办公设备回收</h3>
+                <p>显示器、打印机、服务器、网络设备等企业办公设备批量回收</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">📱</div>
+                <h3>数码产品回收</h3>
+                <p>平板电脑、手机、相机、智能穿戴等数码产品一站式回收</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">🔧</div>
+                <h3>配件回收</h3>
+                <p>显卡、内存、硬盘、主板、电源等电脑配件单独回收，按型号精准报价</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">🏢</div>
+                <h3>企业批量回收</h3>
+                <p>公司、网吧、学校批量淘汰设备上门回收，签订正规合同，数据安全销毁</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 回收流程 -->
+    <section class="section process" id="process">
+        <div class="section-title">
+            <h2>回收流程</h2>
+            <div class="line"></div>
+        </div>
+        <div class="process-steps">
+            <div class="step">
+                <div class="step-number">01</div>
+                <h4>在线估价</h4>
+                <p>电话/微信发送设备信息<br>快速获取报价</p>
+            </div>
+            <div class="step">
+                <div class="step-number">02</div>
+                <h4>上门检测</h4>
+                <p>专业工程师免费上门<br>现场检测设备状况</p>
+            </div>
+            <div class="step">
+                <div class="step-number">03</div>
+                <h4>当面付款</h4>
+                <p>确认价格后当场结算<br>微信/支付宝/现金</p>
+            </div>
+            <div class="step">
+                <div class="step-number">04</div>
+                <h4>数据清除</h4>
+                <p>专业数据粉碎处理<br>保障您的隐私安全</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 价格参考 -->
+    <section class="section" id="price">
+        <div class="section-title">
+            <h2>价格参考</h2>
+            <div class="line"></div>
+        </div>
+        <div class="price-grid">
+            <div class="price-card">
+                <div class="category">笔记本</div>
+                <div class="price">200<span> 起</span></div>
+                <div class="desc">根据品牌、配置、成色<br>综合评估，高价回收</div>
+            </div>
+            <div class="price-card">
+                <div class="category">台式机</div>
+                <div class="price">300<span> 起</span></div>
+                <div class="desc">整机或配件单独回收<br>按市场行情精准报价</div>
+            </div>
+            <div class="price-card">
+                <div class="category">显示器</div>
+                <div class="price">50<span> 起</span></div>
+                <div class="desc">各尺寸、各品牌显示器<br>好坏均可回收</div>
+            </div>
+            <div class="price-card">
+                <div class="category">企业批量</div>
+                <div class="price">面议</div>
+                <div class="desc">批量设备统一回收<br>价格更优，服务更好</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 联系我们 -->
+    <section class="section contact-section" id="contact">
+        <div class="section-title">
+            <h2>联系我们</h2>
+            <div class="line"></div>
+        </div>
+        <div class="contact-card">
+            <p style="color:#888;letter-spacing:2px;">24小时在线 · 免费上门</p>
+            <a href="tel:13377697350" class="contact-phone">133-7769-7350</a>
+            <div class="contact-qr">微信扫码<br>在线估价</div>
+            <div class="contact-info">
+                <p>嘉荣回收电脑</p>
+                <p>专业电脑回收 · 高价上门回收</p>
+                <p>服务时间：周一至周日 8:00 - 22:00</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <p>© 2026 嘉荣回收电脑 · 专业电脑回收平台</p>
+    </footer>
+
+    <!-- 粒子动画 -->
+    <script>
+        const canvas = document.getElementById('particles');
+        const ctx = canvas.getContext('2d');
+
+        let width, height;
+        let particles = [];
+
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedX = (Math.random() - 0.5) * 0.5;
+                this.speedY = (Math.random() - 0.5) * 0.5;
+                this.opacity = Math.random() * 0.5 + 0.1;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x < 0 || this.x > width || this.y < 0 || this.y > height) {
+                    this.reset();
+                }
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(0, 255, 255, ${this.opacity})`;
+                ctx.fill();
+            }
+        }
+
+        function init() {
+            resize();
+            particles = [];
+            const count = Math.floor((width * height) / 12000);
+            for (let i = 0; i < count; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+
+            // 连线
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 120) {
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.strokeStyle = `rgba(0, 255, 255, ${0.08 * (1 - dist / 120)})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', init);
+        init();
+        animate();
+
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
